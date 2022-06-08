@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  projet-db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=projet
+      - POSTGRES_PASSWORD=projet
+      - POSTGRES_DB=projet
+    ports:
+      - "5579:5432"
