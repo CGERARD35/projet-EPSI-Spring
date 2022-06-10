@@ -39,9 +39,9 @@ public class Order {
 //    @JoinColumn(name = "customer_id", nullable = false)
 //    private Client client;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "produit_id", nullable = false)
-//    private Product produit;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "produit_id", nullable = false)
+    private Product produit;
 
 
 }
