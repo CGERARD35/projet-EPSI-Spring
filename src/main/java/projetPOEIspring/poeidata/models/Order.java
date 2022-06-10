@@ -35,9 +35,9 @@ public class Order {
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "customer_id", nullable = false)
-//    private Client client;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produit_id", nullable = false)
