@@ -1,6 +1,7 @@
 package projetPOEIspring.poeidata.services.impl;
 
 import org.springframework.stereotype.Service;
+import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.models.Order;
 import projetPOEIspring.poeidata.repositories.OrderRepository;
@@ -38,15 +39,24 @@ public class OrderServiceImpl implements OrdersService {
     public Order update(Order order) {
         Order orderToUpdate = this.getById(order.getId());
         orderToUpdate.setDateCommande(order.getDateCommande());
-        orderToUpdate.setPrix(order.getPrix());
+        if(order.getPrix() < 0){
+            throw new OrderException("The price need to be over 0 €");
+        } else {
+            orderToUpdate.setPrix(order.getPrix());
+        }
         orderToUpdate.setDuree(order.getDuree());
-        orderToUpdate.setStatut(order.getStatut());
+        if(!order.getStatut().equals("Payée") || !order.getStatut().equals("Impayée")){
+            throw new OrderException("The statut need to be \"Payée\" or \"Impayée\"");
+        } else {
+            orderToUpdate.setStatut(order.getStatut());
+        }
         orderToUpdate.setNotes(order.getNotes());
         return this.orderRepository.save(orderToUpdate);
     }
 
     @Override
-    public void delete(Integer integer) {
-
+    public void delete(Integer id) {
+        Order orderToDelete = this.getById(id);
+        this.orderRepository.delete(orderToDelete);
     }
 }
