@@ -34,11 +34,13 @@ public class Order {
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-//    OnetoOne
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "customer_id", nullable = false)
 //    private Client client;
 
-//    OneToone
-//    private Produit produit;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "produit_id", nullable = false)
+//    private Product produit;
 
 
 }
