@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrdersService {
         Order orderToUpdate = this.getById(order.getId());
         if(order.getPrix() < 0){
             throw new OrderException("The price need to be over 0 €");
-        } else if(!order.getStatut().equals("Payée") || !order.getStatut().equals("Impayée")){
+        } else if(!(order.getStatut().equals("Payée") || order.getStatut().equals("Impayée"))){
             throw new OrderException("Le statut doit être Payée ou Impayée");
         } else {
             orderToUpdate.setDateCommande(order.getDateCommande());
