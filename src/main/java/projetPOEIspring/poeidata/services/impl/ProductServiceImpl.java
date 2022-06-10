@@ -55,8 +55,6 @@ public class ProductServiceImpl implements ProductService {
         productToUpdate.setPrix(product.getPrix());
         productToUpdate.setType(product.getType());
         productToUpdate.setStatut(product.getStatut());
-        Set<Order> orders = product.getCommandes();
-        productToUpdate.setCommandes(orders);
         return productRepository.save(productToUpdate);
     }
 }
