@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import projetPOEIspring.poeidata.api.dto.OrderDto;
+import projetPOEIspring.poeidata.api.dto.OrderProductClientDtoGetAll;
 import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.mappers.OrderMapper;
@@ -34,10 +35,10 @@ public class OrderApi {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Return all the orders")
     })
-    public ResponseEntity<List<OrderDto>> getAll(){
+    public ResponseEntity<List<OrderProductClientDtoGetAll>> getAll(){
         return ResponseEntity.ok(
                 this.orderService.getAll().stream()
-                .map(this.orderMapper::mapToDto)
+                .map(this.orderMapper::mapToDtoOrder)
                 .toList()
         );
     }
@@ -48,9 +49,9 @@ public class OrderApi {
             @ApiResponse(responseCode = "200", description = "Return an order find by is id"),
             @ApiResponse(responseCode = "404", description = "order not found")
     })
-    public ResponseEntity<OrderDto> getById(@PathVariable final Integer id){
+    public ResponseEntity<OrderProductClientDtoGetAll> getById(@PathVariable final Integer id){
         try{
-            return ResponseEntity.ok(this.orderMapper.mapToDto(this.orderService.getById(id)));
+            return ResponseEntity.ok(this.orderMapper.mapToDtoOrder(this.orderService.getById(id)));
         }catch (UnknownResourceException ure){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
         }

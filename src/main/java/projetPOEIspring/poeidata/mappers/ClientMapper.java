@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Component;
 import projetPOEIspring.poeidata.api.dto.ClientDto;
+import projetPOEIspring.poeidata.api.dto.ClientOrderDto;
 import projetPOEIspring.poeidata.api.dto.OrderDto;
 import projetPOEIspring.poeidata.models.Client;
 
@@ -38,5 +39,9 @@ public interface ClientMapper {
 
 
     Client mapToClient (ClientDto clientDto);
+
+    Client mapToClientOrder (ClientOrderDto clientOrderDto);
+
+    ClientOrderDto mapToClientDtoOrder (Client client);
 
 }

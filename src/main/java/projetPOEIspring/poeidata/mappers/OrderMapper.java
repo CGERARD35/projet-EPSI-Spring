@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Component;
 import projetPOEIspring.poeidata.api.dto.OrderDto;
+import projetPOEIspring.poeidata.api.dto.OrderProductClientDtoGetAll;
 import projetPOEIspring.poeidata.models.Order;
 
 @Component
@@ -18,5 +19,9 @@ public interface OrderMapper {
     @Mapping(source = "clientId", target = "client.id")
     @Mapping(source = "produitId", target = "produit.id")
     Order mapToModel(OrderDto orderDto);
+
+    OrderProductClientDtoGetAll mapToDtoOrder(Order order);
+
+    Order mapToModelOrder(OrderProductClientDtoGetAll OrderProductClientDto);
 
 }

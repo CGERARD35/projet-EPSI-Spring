@@ -5,28 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDto {
+public class ProductOrderDto {
 
     private Integer id;
-
-    private Date dateCommande;
-
+    private String nom;
     private Double prix;
-
-    private String duree;
-
-    private  String statut;
-
-    private String notes;
-
-    private Integer clientId;
-
-    private Integer produitId;
-
 }

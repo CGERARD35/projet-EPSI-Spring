@@ -11,7 +11,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDto {
+public class OrderProductClientDtoGetAll {
 
     private Integer id;
 
@@ -25,8 +25,8 @@ public class OrderDto {
 
     private String notes;
 
-    private Integer clientId;
+    private ClientOrderDto client;
 
-    private Integer produitId;
+    private ProductOrderDto produit;
 
 }

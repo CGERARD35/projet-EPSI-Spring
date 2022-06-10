@@ -1,7 +1,5 @@
 package projetPOEIspring.poeidata.services.impl;
 
-import org.slf4j.Logger;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
@@ -39,7 +37,15 @@ public class OrderServiceImpl implements OrdersService {
         } else if(!(order.getStatut().equals("Payée") || order.getStatut().equals("Impayée"))){
             throw new OrderException("Le statut doit être Payée ou Impayée");
         } else {
-            return this.orderRepository.save(order);
+            Order orderToCreate = new Order();
+            orderToCreate.setProduit(order.getProduit());
+            orderToCreate.setClient(order.getClient());
+            orderToCreate.setPrix(order.getPrix());
+            orderToCreate.setNotes(order.getNotes());
+            orderToCreate.setDuree(order.getDuree());
+            orderToCreate.setDateCommande(order.getDateCommande());
+            orderToCreate.setStatut(order.getStatut());
+            return this.orderRepository.save(orderToCreate);
         }
     }
 
@@ -52,8 +58,6 @@ public class OrderServiceImpl implements OrdersService {
             throw new OrderException("Le statut doit être Payée ou Impayée");
         } else {
             orderToUpdate.setDateCommande(order.getDateCommande());
-            orderToUpdate.setProduit(order.getProduit());
-            orderToUpdate.setClient(order.getClient());
             orderToUpdate.setNotes(order.getNotes());
             orderToUpdate.setPrix(order.getPrix());
             orderToUpdate.setDuree(order.getDuree());
