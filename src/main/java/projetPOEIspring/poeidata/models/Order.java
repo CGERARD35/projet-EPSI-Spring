@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "order")
+@Table(name = "commande")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class Order {
     @Column(name = "date_commande", nullable = false)
     private Date dateCommande;
 
-    @Column(name = "prix", nullable = false)
+    @Column(name = "prix", columnDefinition = "NUMERIC", nullable = false)
     private Double prix;
 
     @Column(name = "duree", nullable = false)
@@ -31,14 +31,14 @@ public class Order {
     @Column(name = "statut", nullable = false)
     private  String statut;
 
-    @Column(name = "notes")
+    @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-//    OneToMany
-//    private List<Client> clients;
+//    OnetoOne
+//    private Client client;
 
-//    OneToMany
-//    private List<Produit> produit;
+//    OneToone
+//    private Produit produit;
 
 
 }
