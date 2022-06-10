@@ -26,6 +26,10 @@ public class OrderDto {
 
     private String notes;
 
+    private Integer clientId;
+
+    private Integer produitId;
+
 //    private String clientNom;
 //    private String prenomClient;
 //    private String companyClient;

@@ -6,27 +6,26 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import projetPOEIspring.poeidata.api.dto.OrderDto;
+import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.mappers.OrderMapper;
 import projetPOEIspring.poeidata.services.OrdersService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/orders")
 public class OrderApi {
 
-    private OrdersService ordersService;
+    private OrdersService orderService;
     private OrderMapper orderMapper;
 
-    public OrderApi(OrdersService ordersService, OrderMapper orderMapper) {
-        this.ordersService = ordersService;
+    public OrderApi(OrdersService orderService, OrderMapper orderMapper) {
+        this.orderService = orderService;
         this.orderMapper = orderMapper;
     }
 
@@ -37,7 +36,7 @@ public class OrderApi {
     })
     public ResponseEntity<List<OrderDto>> getAll(){
         return ResponseEntity.ok(
-                this.ordersService.getAll().stream()
+                this.orderService.getAll().stream()
                 .map(this.orderMapper::mapToDto)
                 .toList()
         );
@@ -51,8 +50,66 @@ public class OrderApi {
     })
     public ResponseEntity<OrderDto> getById(@PathVariable final Integer id){
         try{
-            return ResponseEntity.ok(this.orderMapper.mapToDto(this.ordersService.getById(id)));
+            return ResponseEntity.ok(this.orderMapper.mapToDto(this.orderService.getById(id)));
         }catch (UnknownResourceException ure){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        }
+    }
+
+    @PostMapping(
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE}
+    )
+    @Operation(summary = "Create an order")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "404", description = "can't create an order")
+    })
+    public ResponseEntity<OrderDto> addOrder(@RequestBody final OrderDto orderDto){
+        try{
+            OrderDto orderDtoResponse =
+                    this.orderMapper.mapToDto(
+                            this.orderService.create(this.orderMapper.mapToModel(orderDto))
+                    );
+            return ResponseEntity.created(URI.create("/v1/orders/" + orderDtoResponse.getId()))
+                    .body(orderDtoResponse);
+        } catch (OrderException orderException){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, orderException.getMessage());
+        }
+
+    }
+
+    @DeleteMapping(path = "/{id}")
+    @Operation(summary = "Delete an order by the given Id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No content"),
+            @ApiResponse(responseCode = "404", description = "No order found by the given Id"),
+            @ApiResponse(responseCode = "403", description = "can't delete an order by the given Id")
+    })
+    public ResponseEntity<Void> deleteOrder(@PathVariable final Integer id){
+        try{
+            this.orderService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (UnknownResourceException ure) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        }
+    }
+
+    @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @Operation(summary = "Updated order")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No content")
+    })
+    public ResponseEntity<Void> updateOrder(
+            @PathVariable final Integer id,
+            @RequestBody OrderDto orderDto)
+    {
+        try{
+            orderDto.setId(id);
+            this.orderService.update(this.orderMapper.mapToModel(orderDto));
+            return ResponseEntity.noContent().build();
+        } catch (UnknownResourceException ure){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
         }
     }
