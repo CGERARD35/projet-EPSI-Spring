@@ -1,5 +1,6 @@
 package projetPOEIspring.poeidata.services.impl;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
@@ -20,7 +21,7 @@ public class OrderServiceImpl implements OrdersService {
 
     @Override
     public List<Order> getAll() {
-        return this.orderRepository.findAll();
+        return this.orderRepository.findAll(Sort.by("client.com").ascending());
     }
 
     @Override
