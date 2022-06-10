@@ -26,11 +26,11 @@ public class OrderDto {
 
     private String notes;
 
-    private String clientNom;
-    private String prenomClient;
-    private String companyClient;
-
-    private String nomProduit;
-    private String prixProduit;
+//    private String clientNom;
+//    private String prenomClient;
+//    private String companyClient;
+//
+//    private String nomProduit;
+//    private String prixProduit;
 
 }

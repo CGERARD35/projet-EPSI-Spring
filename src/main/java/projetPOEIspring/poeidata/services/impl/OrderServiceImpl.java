@@ -21,13 +21,13 @@ public class OrderServiceImpl implements OrdersService {
 
     @Override
     public List<Order> getAll() {
-        return this.orderRepository.findAll(Sort.by("client.com").ascending());
+        return this.orderRepository.findAll();
     }
 
     @Override
     public Order getById(Integer id) {
         return this.orderRepository.findById(id)
-                .orElseThrow(()-> new UnknownResourceException());
+                .orElseThrow(()-> new UnknownResourceException("Order not found"));
     }
 
     @Override
