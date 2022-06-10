@@ -26,7 +26,7 @@ public class ClientDto {
 
     private String fixe;
 
-    private String mobile;
+    private String portable;
 
     private String notes;
 

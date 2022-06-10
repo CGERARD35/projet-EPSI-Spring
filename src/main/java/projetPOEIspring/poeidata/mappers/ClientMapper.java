@@ -28,7 +28,9 @@ public interface ClientMapper {
                             order.getPrix(),
                             order.getDuree(),
                             order.getStatut(),
-                            order.getNotes()
+                            order.getNotes(),
+                            client.getId(),
+                            null
                     )).toList();
         }
         return orders;
