@@ -65,7 +65,7 @@ public class OrderApi {
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "404", description = "can't create an order")
     })
-    public ResponseEntity<OrderDto> addOrder(@RequestBody final OrderDto orderDto){
+    public ResponseEntity<OrderDto> create(@RequestBody final OrderDto orderDto){
         try{
             OrderDto orderDtoResponse =
                     this.orderMapper.mapToDto(
@@ -86,7 +86,7 @@ public class OrderApi {
             @ApiResponse(responseCode = "404", description = "No order found by the given Id"),
             @ApiResponse(responseCode = "403", description = "can't delete an order by the given Id")
     })
-    public ResponseEntity<Void> deleteOrder(@PathVariable final Integer id){
+    public ResponseEntity<Void> delete(@PathVariable final Integer id){
         try{
             this.orderService.delete(id);
             return ResponseEntity.noContent().build();
@@ -101,7 +101,7 @@ public class OrderApi {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "No content")
     })
-    public ResponseEntity<Void> updateOrder(
+    public ResponseEntity<Void> update(
             @PathVariable final Integer id,
             @RequestBody OrderDto orderDto)
     {
