@@ -22,6 +22,4 @@ public interface OrderMapper {
 
     OrderProductClientDtoGetAll mapToDtoOrder(Order order);
 
-    Order mapToModelOrder(OrderProductClientDtoGetAll OrderProductClientDto);
-
 }

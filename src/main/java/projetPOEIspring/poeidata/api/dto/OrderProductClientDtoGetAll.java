@@ -25,8 +25,8 @@ public class OrderProductClientDtoGetAll {
 
     private String notes;
 
-    private ClientOrderDto client;
+    private OrderClientDto client;
 
-    private ProductOrderDto produit;
+    private OrderProductDto produit;
 
 }
