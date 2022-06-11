@@ -1,6 +1,8 @@
 package projetPOEIspring.poeidata.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.models.User;
@@ -10,6 +12,7 @@ import projetPOEIspring.poeidata.services.UserService;
 import java.util.List;
 
 @Service
+@Qualifier("userService")
 public class UserServiceImpl implements UserService{
 
     @Autowired
@@ -18,7 +21,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getAll() {
-        return this.userRepository.findAll();
+        return this.userRepository.findAll(Sort.by("id").ascending());
     }
 
     @Override
@@ -48,6 +51,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User updateUser(User user) {
-        return null;
+        User existingUser = this.getById(user.getId());
+        existingUser.setMail(user.getMail());
+        existingUser.setNom(user.getNom());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setPrenom(user.getPrenom());
+        existingUser.setRole(user.getRole());
+        existingUser.setStatut(user.getStatut());
+        return this.userRepository.save(existingUser);
+
     }
 }

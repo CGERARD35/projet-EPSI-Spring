@@ -65,4 +65,32 @@ public class UserApi {
                 );
         return ResponseEntity.created(URI.create("/v1/admin/" + userDtoResponse.getId())).body(userDtoResponse);
     }
+
+    @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @Operation(summary = "Update an user")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No content"),
+    })
+    public ResponseEntity<UserDto> updateUser(@PathVariable final Integer id,
+                                              @RequestBody UserDto userDto) {
+
+            userDto.setId(id);
+            UserDto updateUser = userMapper.mapToDto(userService.updateUser(userMapper.mapToModel(userDto)));
+            return ResponseEntity.ok(updateUser);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    @Operation(summary = "Delete an user for the given id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No content"),
+            @ApiResponse(responseCode = "403", description = "Cannot delete the user for the given ID"),
+            @ApiResponse(responseCode = "404", description = "No user found the given ID")
+    })
+    public ResponseEntity<Void> deleteUser(@PathVariable final Integer id) {
+
+            this.userService.deleteUser(id);
+            return ResponseEntity.noContent().build();
+
+    }
 }

@@ -1,31 +1,40 @@
 package projetPOEIspring.poeidata.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "utilisateur")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(length = 30, nullable = false)
     private String nom;
 
-    @Column
+    @Column(length = 30, nullable = false)
     private String prenom;
 
-    @Column
+    @Column(length = 70, nullable = false)
     private String mail;
 
-    @Column
+    @Column(length = 255, nullable = false)
     private String password;
 
-    @Column
+    @Column(length = 30, nullable = false)
     private String role;
 
-    @Column
+    @Column(length = 15, nullable = false)
     private String statut;
 
     @Override
