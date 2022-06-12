@@ -1,12 +1,18 @@
 package projetPOEIspring.poeidata.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
+import projetPOEIspring.poeidata.models.Client;
 import projetPOEIspring.poeidata.models.Order;
+import projetPOEIspring.poeidata.models.Product;
 import projetPOEIspring.poeidata.repositories.OrderRepository;
+import projetPOEIspring.poeidata.services.ClientService;
 import projetPOEIspring.poeidata.services.OrdersService;
+import projetPOEIspring.poeidata.services.ProductService;
 
 import java.util.List;
 
@@ -14,10 +20,16 @@ import java.util.List;
 public class OrderServiceImpl implements OrdersService {
 
     private final OrderRepository orderRepository;
+    private final ClientService clientService;
+    private final ProductService productService;
 
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    @Lazy
+    public OrderServiceImpl(OrderRepository orderRepository, ClientService clientService, ProductService productService) {
         this.orderRepository = orderRepository;
+        this.clientService = clientService;
+        this.productService = productService;
     }
+
 
     @Override
     public List<Order> getAll() {
@@ -39,8 +51,10 @@ public class OrderServiceImpl implements OrdersService {
             throw new OrderException("Le statut doit être Payée ou Impayée");
         } else {
             Order orderToCreate = new Order();
-            orderToCreate.setProduit(order.getProduit());
-            orderToCreate.setClient(order.getClient());
+            Client clientToGet= this.clientService.getById(order.getClient().getId());
+            orderToCreate.setClient(clientToGet);
+            Product producToGet = this.productService.getById(order.getProduit().getId());
+            orderToCreate.setProduit(producToGet);
             orderToCreate.setPrix(order.getPrix());
             orderToCreate.setNotes(order.getNotes());
             orderToCreate.setDuree(order.getDuree());
