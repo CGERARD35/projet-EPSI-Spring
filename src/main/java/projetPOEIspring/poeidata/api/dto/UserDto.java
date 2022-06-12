@@ -19,4 +19,5 @@ public class UserDto {
     private String password;
     private String mail;
     private String role;
+    private String statut;
 }
