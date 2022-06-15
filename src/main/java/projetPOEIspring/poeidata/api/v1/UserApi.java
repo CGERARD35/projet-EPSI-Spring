@@ -91,6 +91,17 @@ public class UserApi {
 
             this.userService.deleteUser(id);
             return ResponseEntity.noContent().build();
+    }
 
+    @GetMapping(path = "/connexion", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @Operation(summary = "Return a user by its mail and password")
+    public ResponseEntity<UserDto> login(@RequestParam String mail, @RequestParam String password) {
+        try {
+            return ResponseEntity.ok(
+                    userMapper.mapToDto(userService.getUserByMailAndPassword(mail, password))
+            );
+        } catch (UnknownResourceException ure) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        }
     }
 }

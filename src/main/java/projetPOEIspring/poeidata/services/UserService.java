@@ -10,6 +10,8 @@ public interface UserService {
 
     User getById(Integer id);
 
+    User getByMail(String mail);
+
     User createUser(User user);
 
     User getUserByMailAndPassword(String mail, String password);

@@ -3,6 +3,7 @@ package projetPOEIspring.poeidata.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.models.User;
@@ -30,6 +31,12 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new UnknownResourceException("Unknown user."));
     }
 
+    public User getByMail(String mail) {
+        return this.userRepository.findByMail(mail).orElseThrow(
+                () -> new UnknownResourceException("No user found for this mail.")
+        );
+    }
+
 
     @Override
     public User createUser(User user) {
@@ -40,7 +47,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUserByMailAndPassword(String mail, String password) {
-        return null;
+        User user = this.userRepository.findByMail(mail).get();
+        if (new BCryptPasswordEncoder().matches(password, user.getPassword())) {
+            return user;
+        }
+        throw  new UnknownResourceException("No user found for the given mail/password.");
     }
 
     @Override
@@ -54,7 +65,8 @@ public class UserServiceImpl implements UserService{
         User existingUser = this.getById(user.getId());
         existingUser.setMail(user.getMail());
         existingUser.setNom(user.getNom());
-        existingUser.setPassword(user.getPassword());
+        String passwordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
+        existingUser.setPassword(passwordEncoded);
         existingUser.setPrenom(user.getPrenom());
         existingUser.setRole(user.getRole());
         existingUser.setStatut(user.getStatut());
