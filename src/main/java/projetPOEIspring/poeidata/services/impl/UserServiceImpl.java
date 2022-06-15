@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User createUser(User user) {
-
+        String passwordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(passwordEncoded);
         return this.userRepository.save(user);
-
     }
 
     @Override
