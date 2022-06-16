@@ -45,10 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic()
+                .authenticationEntryPoint(new CustomAuthEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.DELETE,"/v1/admin/**")
-                .hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .logout()
