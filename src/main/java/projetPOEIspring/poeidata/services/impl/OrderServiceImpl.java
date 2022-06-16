@@ -3,7 +3,7 @@ package projetPOEIspring.poeidata.services.impl;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import projetPOEIspring.poeidata.PayementOrder;
+import projetPOEIspring.poeidata.Enums.PayementOrder;
 import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.models.Client;

@@ -1,4 +1,4 @@
-package projetPOEIspring.poeidata;
+package projetPOEIspring.poeidata.Enums;
 
 public enum PayementOrder {
     IMPAYEE("Impayée"),
