@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import projetPOEIspring.poeidata.api.dto.ClientDto;
+import projetPOEIspring.poeidata.exceptions.ClientException;
 import projetPOEIspring.poeidata.exceptions.NotAllowedToDeleteClientException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.mappers.ClientMapper;
@@ -56,8 +57,8 @@ public class ClientApi {
     public ResponseEntity<ClientDto> findById(@PathVariable final Integer id) {
         try {
             return ResponseEntity.ok(this.clientMapper.mapToClientDto(this.clientService.getById(id)));
-        } catch (UnknownResourceException ure) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        } catch (ClientException ce) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ce.getMessage());
         }
     }
 
@@ -76,9 +77,13 @@ public class ClientApi {
                                 this.clientMapper.mapToClient(clientDto)
                         )
                 );
-        return ResponseEntity
-                .created(URI.create("/v1/clients/" + clientDtoResponse.getId()))
-                .body(clientDtoResponse);
+        try {
+            return ResponseEntity
+                    .created(URI.create("/v1/clients/" + clientDtoResponse.getId()))
+                    .body(clientDtoResponse);
+        } catch (ClientException ce) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ce.getMessage());
+        }
     }
 
     @DeleteMapping(path = "/{id}")
@@ -94,8 +99,8 @@ public class ClientApi {
         try {
             this.clientService.deleteClient(id);
             return ResponseEntity.noContent().build();
-        } catch (UnknownResourceException ure) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        } catch (ClientException ce) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ce.getMessage());
         } catch (NotAllowedToDeleteClientException ex) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, ex.getMessage());
         }
@@ -115,8 +120,8 @@ public class ClientApi {
             this.clientService.updateClient(clientMapper.mapToClient(clientDto));
             log.debug("Successfully updated client {}", clientDto.getId());
             return ResponseEntity.noContent().build();
-        } catch (UnknownResourceException ure) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        } catch (ClientException ce) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ce.getMessage());
         }
     }
 }

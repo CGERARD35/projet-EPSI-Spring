@@ -33,10 +33,12 @@ public class Client {
     @Column(nullable = false)
     private String mail;
 
-    @Column(nullable = false)
+    @Column(nullable = false,
+    length = 15)
     private String portable;
 
-    @Column(nullable = false)
+    @Column(nullable = false,
+            length = 15)
     private String fixe;
 
     @Column(nullable = false)
