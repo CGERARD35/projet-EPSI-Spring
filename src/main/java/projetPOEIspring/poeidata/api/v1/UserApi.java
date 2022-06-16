@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import projetPOEIspring.poeidata.api.dto.UserDto;
+import projetPOEIspring.poeidata.exceptions.OrderException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
+import projetPOEIspring.poeidata.exceptions.UserException;
 import projetPOEIspring.poeidata.mappers.UserMapper;
 import projetPOEIspring.poeidata.services.UserService;
 
@@ -56,14 +58,20 @@ public class UserApi {
     @Operation(summary = "create user")
     @ApiResponse(responseCode = "201", description = "Created")
     public ResponseEntity<UserDto> createUser(@RequestBody final UserDto userDto) {
+        try{
 
-        UserDto userDtoResponse =
-                this.userMapper.mapToDto(
-                        this.userService.createUser(
-                                this.userMapper.mapToModel(userDto)
-                        )
-                );
-        return ResponseEntity.created(URI.create("/v1/admin/" + userDtoResponse.getId())).body(userDtoResponse);
+            UserDto userDtoResponse =
+                    this.userMapper.mapToDto(
+                            this.userService.createUser(
+                                    this.userMapper.mapToModel(userDto)
+                            )
+                    );
+            return ResponseEntity.created(URI.create("/v1/admin/" + userDtoResponse.getId())).body(userDtoResponse);
+
+        } catch (UserException userException){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, userException.getMessage());
+        }
+
     }
 
     @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE},
@@ -74,10 +82,14 @@ public class UserApi {
     })
     public ResponseEntity<UserDto> updateUser(@PathVariable final Integer id,
                                               @RequestBody UserDto userDto) {
-
+        try {
             userDto.setId(id);
             UserDto updateUser = userMapper.mapToDto(userService.updateUser(userMapper.mapToModel(userDto)));
             return ResponseEntity.ok(updateUser);
+
+        } catch (UserException userException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, userException.getMessage());
+        }
     }
 
     @DeleteMapping(path = "/{id}")
@@ -88,9 +100,13 @@ public class UserApi {
             @ApiResponse(responseCode = "404", description = "No user found the given ID")
     })
     public ResponseEntity<Void> deleteUser(@PathVariable final Integer id) {
-
+        try {
             this.userService.deleteUser(id);
             return ResponseEntity.noContent().build();
+
+        } catch (UnknownResourceException ure) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        }
     }
 
     @GetMapping(path = "/connexion", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})

@@ -65,16 +65,19 @@ public class ProductApi {
     @Operation(summary = "Create a product")
     @ApiResponse(responseCode = "201", description = "Created")
     public ResponseEntity<ProductDto> createProduct(@RequestBody final ProductDto productDto) {
+        try {
+            ProductDto productDtoResponse =
+                    this.productMapper.mapProductToDto(
+                            this.productService.createProduct(
+                                    this.productMapper.mapProductToModel(productDto)
+                            ));
 
-        ProductDto productDtoResponse =
-                this.productMapper.mapProductToDto(
-                        this.productService.createProduct(
-                                this.productMapper.mapProductToModel(productDto)
-                        ));
-
-        return ResponseEntity
-                .created(URI.create("/v1/products/" + productDtoResponse.getId()))
-                .body(productDtoResponse);
+            return ResponseEntity
+                    .created(URI.create("/v1/products/" + productDtoResponse.getId()))
+                    .body(productDtoResponse);
+        } catch (UnknownResourceException ure) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ure.getMessage());
+        }
     }
 
     @DeleteMapping(path = "/{id}")

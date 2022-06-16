@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import projetPOEIspring.poeidata.exceptions.ClientException;
 import projetPOEIspring.poeidata.exceptions.NotAllowedToDeleteClientException;
 import projetPOEIspring.poeidata.exceptions.UnknownResourceException;
 import projetPOEIspring.poeidata.models.Client;
@@ -39,6 +40,11 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client createClient(Client client) {
         log.debug("Attempting to save in DB.");
+        if (client.getNom().isEmpty() || client.getPrenom().isEmpty()) {
+            throw new ClientException("Lastname and firstname are obligatory");
+        } else if (client.getFixe().length() > 15 && client.getPortable().length() > 15){
+            throw new ClientException("Phone number and mobile number have to be superior to 15 numbers");
+        }
         return this.clientRepository.save(client);
     }
 
